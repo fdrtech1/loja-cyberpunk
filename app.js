@@ -48,7 +48,7 @@ const ENDERECO_RETIRADA = "Beco 260, Capelinha";
 
 // Pede para o cliente confirmar que tem 18 anos ou mais ao abrir o app.
 // (Venda de produtos de tabacaria para menores de 18 é proibida por lei.)
-const CONFIRMAR_IDADE = true;
+const CONFIRMAR_IDADE = false;
 
 // Horário de funcionamento para retirada (formato 24h "HH:MM").
 const HORA_ABERTURA = "15:00";
