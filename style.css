@@ -732,3 +732,57 @@ input:focus, select:focus, textarea:focus { border-color: var(--verde); box-shad
 @media (prefers-reduced-motion: reduce) {
   .glitch { animation: none; }
 }
+
+/* =========================================================
+   CARROSSEL LATERAL + SUBPÁGINAS DE CATEGORIA
+   Na tela inicial cada categoria desliza para o lado.
+   "Ver todos" abre a categoria sozinha, em grade (#inicio/<categoria>).
+   ========================================================= */
+.categoria-topo { align-items: center; }
+.ver-todos {
+  margin-left: auto; font-weight: 800; font-size: 0.9rem; white-space: nowrap;
+  text-decoration: none; color: var(--cor, var(--ouro)); padding: 6px 2px;
+}
+.secao-texto { flex-basis: 100%; }
+.carrossel .lista-produtos {
+  display: flex; gap: 12px; overflow-x: auto; overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory; scroll-padding: 0 16px;
+  margin: 0 -16px; padding: 10px 16px 16px;
+  scrollbar-width: none; -webkit-overflow-scrolling: touch;
+}
+.carrossel .lista-produtos::-webkit-scrollbar { display: none; }
+.carrossel .lista-produtos > li { flex: 0 0 46%; scroll-snap-align: start; }
+.carrossel.destaque .lista-produtos > li { flex-basis: 84%; }
+@media (min-width: 640px) {
+  .carrossel .lista-produtos > li { flex-basis: 30%; }
+  .carrossel.destaque .lista-produtos > li { flex-basis: 46%; }
+}
+@media (min-width: 960px) {
+  .carrossel .lista-produtos > li { flex-basis: 23%; }
+  .carrossel.destaque .lista-produtos > li { flex-basis: 32%; }
+  .dica-arraste { display: none; }
+}
+.dica-arraste { margin: -8px 4px 0; font-size: 0.8rem; font-weight: 700; color: var(--texto-suave); }
+.categoria { margin-top: 10px; }
+
+.chip { text-decoration: none; }
+.chip-todos { border-color: var(--texto-suave); color: var(--texto); }
+.chip.ativo { color: var(--preto); }
+.chip-todos.ativo { background: var(--texto); border-color: var(--texto); }
+.chip-ouro.ativo { background: var(--ouro); }
+.chip-verde.ativo { background: var(--verde-vivo); }
+.chip-vermelho.ativo { background: var(--vermelho-vivo); }
+.chip.ativo span { background: var(--preto); color: var(--texto); }
+
+.itens-detalhe { margin: 0 0 4px; }
+.itens-detalhe summary {
+  cursor: pointer; list-style: none; padding: 8px 0; font-weight: 800; color: var(--cor, var(--ouro));
+}
+.itens-detalhe summary::-webkit-details-marker { display: none; }
+.itens-detalhe summary::after { content: " ▾"; }
+.itens-detalhe[open] summary::after { content: " ▴"; }
+.itens-detalhe + .soma-itens { margin-top: 4px; }
+
+/* Na subpágina de categoria, esconde o banner para mostrar os itens direto */
+body.filtrando .hero, body.filtrando .dica-ios { display: none; }
+body.filtrando .nav-categorias { margin-top: 0; }

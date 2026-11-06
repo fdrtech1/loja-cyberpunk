@@ -318,7 +318,7 @@ function listaItens(p) {
       ? `<li><span>${esc(it.nome)}</span></li>`
       : `<li><span>${it.qtd}× ${esc(it.nome)}</span><strong>${brl(it.qtd * it.preco)}</strong></li>`)
     .join("");
-  return `<ul class="produto-itens${comValor ? " com-valor" : ""}">${linhas}</ul>${comValor ? `<p class="soma-itens"><span>Soma dos itens</span><strong>${brl(p.preco)}</strong></p>` : ""}`;
+  return `<details class="itens-detalhe"${filtroCategoria ? " open" : ""}><summary>Ver o que vem (${p.itensCalc.length} itens)</summary><ul class="produto-itens${comValor ? " com-valor" : ""}">${linhas}</ul></details>${comValor ? `<p class="soma-itens"><span>Soma dos itens</span><strong>${brl(p.preco)}</strong></p>` : ""}`;
 }
 
 function cardProduto(p, i) {
@@ -345,21 +345,28 @@ function cardProduto(p, i) {
     </li>`;
 }
 
+let filtroCategoria = "";
+
 function renderProdutos() {
   const cats = (typeof CATEGORIAS !== "undefined" && CATEGORIAS.length ? CATEGORIAS : [{ id: "", nome: "Produtos", texto: "", cor: "ouro" }])
     .map((c) => ({ ...c, itens: PRODUTOS.filter((p) => !c.id || p.categoria === c.id) }))
     .filter((c) => c.itens.length);
-  $("#nav-categorias").innerHTML = cats
-    .map((c) => `<button type="button" class="chip chip-${esc(c.cor)}" data-ir-cat="${esc(c.id)}">${esc(c.nome)} <span>${c.itens.length}</span></button>`)
-    .join("");
+  const filtro = cats.some((c) => c.id === filtroCategoria) ? filtroCategoria : "";
+  document.body.classList.toggle("filtrando", !!filtro);
+  $("#nav-categorias").innerHTML =
+    `<a class="chip chip-todos${filtro ? "" : " ativo"}" href="#inicio">Tudo</a>` +
+    cats.map((c) => `<a class="chip chip-${esc(c.cor)}${filtro === c.id ? " ativo" : ""}" href="#inicio/${esc(c.id)}">${esc(c.nome)} <span>${c.itens.length}</span></a>`).join("");
   $("#lista-produtos").innerHTML = cats
+    .filter((c) => !filtro || c.id === filtro)
     .map((c) => `
-      <section class="categoria cor-${esc(c.cor)} ${c.destaque ? "destaque" : "compacta"}" id="cat-${esc(c.id)}">
+      <section class="categoria cor-${esc(c.cor)} ${c.destaque ? "destaque" : "compacta"} ${filtro ? "grade" : "carrossel"}" id="cat-${esc(c.id)}">
         <div class="categoria-topo">
           <h2 class="secao-titulo">${esc(c.nome)}</h2>
+          ${filtro ? `<a class="ver-todos" href="#inicio">← Tudo</a>` : `<a class="ver-todos" href="#inicio/${esc(c.id)}">Ver todos (${c.itens.length}) →</a>`}
           ${c.texto ? `<p class="secao-texto">${esc(c.texto)}</p>` : ""}
         </div>
         <ul class="lista-produtos">${c.itens.map((p, i) => cardProduto(p, i)).join("")}</ul>
+        ${!filtro && c.itens.length > 1 ? `<p class="dica-arraste" aria-hidden="true">Arraste para o lado →</p>` : ""}
       </section>`)
     .join("");
 }
@@ -704,8 +711,9 @@ function destinoPermitido(nome) {
 }
 
 function rota() {
-  let nome = location.hash.replace("#", "") || "inicio";
+  let [nome, sub] = (location.hash.replace("#", "") || "inicio").split("/");
   if (!ROTAS.includes(nome)) nome = "inicio";
+  if (nome === "inicio" && (sub || "") !== filtroCategoria) { filtroCategoria = sub || ""; renderProdutos(); }
   const destino = destinoPermitido(nome);
   if (destino !== nome) { location.replace("#" + destino); return; }
 
