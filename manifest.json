@@ -1,0 +1,21 @@
+{
+  "id": "./",
+  "name": "Loja Cyberpunk",
+  "short_name": "Loja Cyber",
+  "description": "Tabacaria e larica: sedas, tabaco, acessórios e combos. Peça pelo WhatsApp.",
+  "lang": "pt-BR",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#07060d",
+  "theme_color": "#07060d",
+  "categories": ["shopping", "food"],
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="fundo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#07060d"/>
+      <stop offset="1" stop-color="#2a0b3d"/>
+    </linearGradient>
+    <linearGradient id="sol" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fcee0a"/>
+      <stop offset="1" stop-color="#ff2bd6"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" fill="url(#fundo)"/>
+  <!-- grade de chão -->
+  <g stroke="#00f0ff" stroke-width="3" opacity=".55">
+    <path d="M0 380h512M0 410h512M0 452h512M256 350L-80 512M256 350L80 512M256 350v162M256 350l176 162M256 350l336 162"/>
+  </g>
+  <!-- hexágono / chip -->
+  <path d="M256 70l150 86v172l-150 86-150-86V156z" fill="#07060d" stroke="#00f0ff" stroke-width="14"/>
+  <circle cx="256" cy="230" r="78" fill="url(#sol)"/>
+  <g fill="#07060d"><rect x="170" y="226" width="172" height="8"/><rect x="170" y="250" width="172" height="12"/><rect x="170" y="278" width="172" height="16"/></g>
+  <path d="M196 164h120M196 316h120" stroke="#ff2bd6" stroke-width="8"/>
+</svg>

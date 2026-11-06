@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Loja Cyberpunk</title>
+  <meta name="description" content="Loja Cyberpunk: monte seu pedido, pague no Pix ou cartão e envie pelo WhatsApp.">
+  <meta name="theme-color" content="#07060d">
+  <meta name="color-scheme" content="dark">
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Loja Cyber">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <!-- Fontes gratuitas do Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Chakra+Petch:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-tela="inicio">
+  <a class="pular" href="#app">Pular para o conteúdo</a>
+
+  <!-- Confirmação de idade (18+) -->
+  <div id="idade" class="idade" role="dialog" aria-modal="true" aria-labelledby="idade-titulo" hidden>
+    <div class="idade-caixa">
+      <div class="faixa-rasta" aria-hidden="true"></div>
+      <svg class="idade-bandeira" viewBox="0 0 300 150" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <defs>
+          <linearGradient id="ceu-m" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#07060d"/><stop offset="1" stop-color="#2a0b3d"/></linearGradient>
+          <linearGradient id="sol-m" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fcee0a"/><stop offset="1" stop-color="#ff2bd6"/></linearGradient>
+        </defs>
+        <rect width="300" height="150" fill="url(#ceu-m)"/>
+        <circle cx="150" cy="92" r="46" fill="url(#sol-m)"/>
+        <g fill="#2a0b3d"><rect x="100" y="84" width="100" height="3"/><rect x="100" y="95" width="100" height="5"/><rect x="100" y="108" width="100" height="7"/></g>
+        <rect y="118" width="300" height="32" fill="#07060d"/>
+        <g stroke="#00f0ff" stroke-width="1" opacity=".7"><path d="M0 122h300M0 129h300M0 139h300M150 118L30 150M150 118L90 150M150 118l60 32M150 118l120 32"/></g>
+      </svg>
+      <div id="idade-pergunta">
+        <h2 id="idade-titulo">Você tem 18 anos ou mais?</h2>
+        <p>Esta loja tem produtos de tabacaria. A venda é proibida para menores de 18 anos.</p>
+        <div class="idade-botoes">
+          <button type="button" id="idade-sim" class="btn btn-primario">Sim, tenho 18+</button>
+          <button type="button" id="idade-nao" class="btn btn-secundario">Não</button>
+        </div>
+      </div>
+      <div id="idade-bloqueio" hidden>
+        <h2>Acesso não permitido</h2>
+        <p>Desculpe, a venda de produtos de tabacaria é proibida para menores de 18 anos.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chuva de estilhaços neon (só na tela inicial) + linhas de varredura -->
+  <div class="scanlines" aria-hidden="true"></div>
+  <div id="folhas-fundo" aria-hidden="true"></div>
+
+  <header class="topo">
+    <a href="#inicio" class="marca" aria-label="Loja Cyberpunk — início">
+      <svg class="marca-icone" viewBox="0 0 48 48" aria-hidden="true">
+        <path d="M24 2l19 11v22L24 46 5 35V13z" fill="#07060d" stroke="#00f0ff" stroke-width="2.5"/>
+        <path d="M16 17h16v14H16z" fill="none" stroke="#fcee0a" stroke-width="2.5"/>
+        <path d="M20 13v4M28 13v4M20 31v4M28 31v4M12 21h4M12 27h4M32 21h4M32 27h4" stroke="#fcee0a" stroke-width="2"/>
+        <rect x="20" y="21" width="8" height="6" fill="#ff2bd6"/>
+      </svg>
+      <span class="marca-texto">Loja <em>Cyberpunk</em></span>
+    </a>
+    <div class="topo-acoes">
+      <button type="button" id="btn-instalar" class="btn-instalar" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Instalar
+      </button>
+      <a href="#carrinho" id="btn-carrinho" class="btn-carrinho" aria-label="Abrir carrinho">
+        <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 10V7a3 3 0 0 1 6 0v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M12 17c-2.5-.2-3-2.5-1.5-4.5 2 .3 3 2.2 1.5 4.5z" fill="currentColor"/></svg>
+        <span id="badge" class="badge" hidden>0</span>
+      </a>
+    </div>
+  </header>
+  <div class="faixa-rasta faixa-topo" aria-hidden="true"></div>
+
+  <nav class="etapas" id="etapas" aria-label="Etapas do pedido" hidden>
+    <ol>
+      <li><span class="etapa-num">1</span><span class="etapa-nome">Carrinho</span></li>
+      <li><span class="etapa-num">2</span><span class="etapa-nome">Receber</span></li>
+      <li><span class="etapa-num">3</span><span class="etapa-nome">Dados</span></li>
+      <li><span class="etapa-num">4</span><span class="etapa-nome">Pagar</span></li>
+      <li><span class="etapa-num">5</span><span class="etapa-nome">Enviar</span></li>
+    </ol>
+  </nav>
+
+  <main id="app">
+
+    <!-- 1. TELA INICIAL ===================================== -->
+    <section class="tela" data-tela="inicio">
+      <div class="hero">
+        <svg class="hero-bandeira" viewBox="0 0 300 150" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <defs>
+            <linearGradient id="ceu" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#07060d"/><stop offset="1" stop-color="#2a0b3d"/></linearGradient>
+            <linearGradient id="sol" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fcee0a"/><stop offset="1" stop-color="#ff2bd6"/></linearGradient>
+          </defs>
+          <rect width="300" height="150" fill="url(#ceu)"/>
+          <circle cx="215" cy="74" r="40" fill="url(#sol)"/>
+          <g fill="#2a0b3d"><rect x="175" y="66" width="80" height="3"/><rect x="175" y="77" width="80" height="4"/><rect x="175" y="89" width="80" height="6"/></g>
+          <g fill="#110d22" stroke="#3b2a6b" stroke-width=".6">
+            <rect x="0" y="50" width="26" height="55"/><rect x="28" y="70" width="18" height="35"/><rect x="48" y="36" width="30" height="69"/>
+            <rect x="80" y="62" width="20" height="43"/><rect x="102" y="46" width="24" height="59"/><rect x="128" y="72" width="16" height="33"/>
+            <rect x="146" y="56" width="28" height="49"/><rect x="178" y="80" width="22" height="25"/><rect x="202" y="60" width="16" height="45"/>
+            <rect x="238" y="44" width="28" height="61"/><rect x="268" y="64" width="32" height="41"/>
+          </g>
+          <g fill="#00f0ff"><rect x="6" y="58" width="3" height="3"/><rect x="14" y="70" width="3" height="3"/><rect x="54" y="44" width="3" height="3"/><rect x="66" y="60" width="3" height="3"/><rect x="108" y="54" width="3" height="3"/><rect x="152" y="66" width="3" height="3"/><rect x="244" y="52" width="3" height="3"/><rect x="276" y="74" width="3" height="3"/></g>
+          <g fill="#fcee0a"><rect x="60" y="76" width="3" height="3"/><rect x="116" y="70" width="3" height="3"/><rect x="162" y="82" width="3" height="3"/><rect x="254" y="66" width="3" height="3"/></g>
+          <g fill="#ff2bd6"><rect x="34" y="80" width="3" height="3"/><rect x="86" y="72" width="3" height="3"/><rect x="208" y="70" width="3" height="3"/><rect x="286" y="88" width="3" height="3"/></g>
+          <rect x="48" y="30" width="2" height="6" fill="#ff2bd6"/><rect x="250" y="38" width="2" height="6" fill="#00f0ff"/>
+          <rect y="105" width="300" height="45" fill="#07060d"/>
+          <g stroke="#ff2bd6" stroke-width=".8" opacity=".75"><path d="M0 109h300M0 115h300M0 124h300M0 137h300"/></g>
+          <g stroke="#00f0ff" stroke-width=".8" opacity=".6"><path d="M150 105L-60 150M150 105L20 150M150 105L90 150M150 105v45M150 105l60 45M150 105l130 45M150 105l210 45"/></g>
+        </svg>
+        <div class="hero-conteudo">
+          <p class="hero-sobre"><span>Neon</span> <span>Delivery</span> <span>Pix</span></p>
+          <h1 class="glitch" data-texto="A loja do futuro">A loja do futuro <em>chegou no seu bairro</em></h1>
+          <p class="hero-texto">Monte seu pedido, pague no <span class="formas-pagamento">Pix</span> e mande direto no WhatsApp. Retire no local ou receba em casa.</p>
+          <ul class="hero-regras">
+            <li id="regra-minimo">Pedido mínimo</li>
+            <li class="formas-pagamento formas-maiuscula">Pix</li>
+            <li>Retirada ou entrega</li>
+          </ul>
+        </div>
+      </div>
+
+      <div id="dica-ios" class="dica-ios" hidden>
+        <p><strong>Instale no iPhone:</strong> toque em <span aria-label="Compartilhar">Compartilhar ⬆️</span> e depois em <strong>“Adicionar à Tela de Início”</strong>.</p>
+        <button type="button" id="fechar-dica-ios" class="link">Entendi</button>
+      </div>
+
+      <nav id="nav-categorias" class="nav-categorias" aria-label="Categorias"></nav>
+      <div id="lista-produtos"></div>
+    </section>
+
+    <!-- 2. CARRINHO ========================================= -->
+    <section class="tela" data-tela="carrinho" hidden>
+      <h1 class="titulo-tela" tabindex="-1">Seu carrinho</h1>
+
+      <div id="carrinho-vazio" class="vazio">
+        <div class="vazio-arte" aria-hidden="true">
+          <svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="54" fill="#100e1c" stroke="#00f0ff" stroke-width="3"/><path d="M34 48h52l-4 40a6 6 0 0 1-6 5H44a6 6 0 0 1-6-5z" fill="#ff2bd6"/><path d="M47 52V42a13 13 0 0 1 26 0v10" stroke="#00f0ff" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M38 66h44" stroke="#00f0ff" stroke-width="6"/><path d="M39 74h42" stroke="#fcee0a" stroke-width="6"/></svg>
+        </div>
+        <p>Seu carrinho está vazio.</p>
+        <a href="#inicio" class="btn btn-primario">Ver os kits</a>
+      </div>
+
+      <div id="carrinho-cheio" hidden>
+        <ul id="lista-carrinho" class="lista-carrinho"></ul>
+
+        <div class="cartao resumo">
+          <div class="linha"><span>Subtotal</span><strong id="carrinho-subtotal" class="contador">R$ 0,00</strong></div>
+          <div class="linha"><span>Entrega</span><span id="carrinho-entrega">Escolha na próxima etapa</span></div>
+          <div class="linha total"><span>Total</span><strong id="carrinho-total" class="contador">R$ 0,00</strong></div>
+
+          <div class="faixa" aria-hidden="true">
+            <div class="faixa-trilho">
+              <div id="faixa-preenchida" class="faixa-preenchida"></div>
+              <span id="faixa-marca" class="faixa-marca"></span>
+            </div>
+            <div class="faixa-rotulos"><span id="faixa-min">Mín.</span><span id="faixa-max">Máx.</span></div>
+          </div>
+          <p id="aviso-faixa" class="aviso" role="status" aria-live="polite"></p>
+        </div>
+
+        <div class="acoes">
+          <a href="#inicio" class="btn btn-secundario">Continuar comprando</a>
+          <button type="button" id="btn-finalizar" class="btn btn-primario" disabled>Finalizar pedido</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. RETIRADA OU ENTREGA ============================== -->
+    <section class="tela" data-tela="entrega" hidden>
+      <h1 class="titulo-tela" tabindex="-1">Como você quer receber?</h1>
+
+      <fieldset class="opcoes">
+        <legend class="sr-only">Forma de recebimento</legend>
+        <label class="opcao">
+          <input type="radio" name="modo" value="retirada">
+          <span class="opcao-corpo">
+            <svg class="opcao-icone" viewBox="0 0 48 48" aria-hidden="true"><path d="M8 20l4-10h24l4 10" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M8 20h32v4a5 5 0 0 1-8 4 5 5 0 0 1-8 0 5 5 0 0 1-8 0 5 5 0 0 1-8-4z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M11 29v11h26V29M20 40v-7h8v7" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg>
+            <span><strong>Retirar no local</strong><small>Mesmo preço, sem taxa</small></span>
+          </span>
+        </label>
+        <label class="opcao">
+          <input type="radio" name="modo" value="entrega">
+          <span class="opcao-corpo">
+            <svg class="opcao-icone" viewBox="0 0 48 48" aria-hidden="true"><path d="M4 12h24v20H4zM28 20h8l6 7v5H28z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><circle cx="12" cy="35" r="4" fill="#100e1c" stroke="currentColor" stroke-width="3"/><circle cx="35" cy="35" r="4" fill="#100e1c" stroke="currentColor" stroke-width="3"/></svg>
+            <span><strong>Entrega</strong><small id="taxa-entrega-txt">Taxa fixa</small></span>
+          </span>
+        </label>
+      </fieldset>
+
+      <div id="bloco-retirada" class="cartao bloco" hidden>
+        <p class="destaque">Seu pedido fica pronto a partir de <strong id="pronto-em">—</strong>.</p>
+        <label for="horario" class="rotulo">Horário de retirada</label>
+        <select id="horario"></select>
+        <p class="dica"><strong>Endereço para retirada:</strong> <span id="endereco-loja"></span></p>
+      </div>
+
+      <div id="bloco-entrega" class="cartao bloco" hidden>
+        <button type="button" id="btn-localizacao" class="btn btn-secundario btn-largo">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="12" cy="10" r="2.6" fill="currentColor"/></svg> Enviar minha localização</button>
+        <p id="status-localizacao" class="dica" role="status" aria-live="polite"></p>
+        <p class="dica">A localização é pedida <strong>uma única vez</strong>, só quando você toca no botão, para montar o link do mapa no pedido. Não fazemos rastreamento.</p>
+        <label for="endereco" class="rotulo">Ou escreva o endereço e um ponto de referência</label>
+        <textarea id="endereco" rows="3" autocomplete="street-address" placeholder="Rua, número, bairro, complemento. Ex.: casa de portão verde, ao lado da padaria."></textarea>
+      </div>
+
+      <div class="total-mini"><span>Total do pedido</span><strong id="entrega-total" class="contador">R$ 0,00</strong></div>
+      <p id="aviso-entrega" class="aviso" role="status" aria-live="polite"></p>
+
+      <div class="acoes">
+        <a href="#carrinho" class="btn btn-secundario">Voltar</a>
+        <button type="button" id="btn-ir-dados" class="btn btn-primario" disabled>Continuar</button>
+      </div>
+    </section>
+
+    <!-- 4. DADOS DO CLIENTE ================================= -->
+    <section class="tela" data-tela="dados" hidden>
+      <h1 class="titulo-tela" tabindex="-1">Seus dados</h1>
+      <form id="form-dados" class="cartao bloco" novalidate>
+        <label for="nome" class="rotulo">Nome</label>
+        <input id="nome" name="nome" type="text" autocomplete="name" placeholder="Como podemos te chamar?" required>
+        <label for="telefone" class="rotulo">Telefone (WhatsApp)</label>
+        <input id="telefone" name="telefone" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="(11) 91234-5678" required>
+        <p class="dica">Usamos seu nome e telefone só para combinar o seu pedido.</p>
+        <p id="erro-dados" class="aviso" role="alert"></p>
+        <div class="acoes">
+          <a href="#entrega" class="btn btn-secundario">Voltar</a>
+          <button type="submit" class="btn btn-primario">Continuar</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- 5. PAGAMENTO ======================================== -->
+    <section class="tela" data-tela="pagamento" hidden>
+      <h1 class="titulo-tela" tabindex="-1">Forma de pagamento</h1>
+      <div class="total-mini"><span>Total a pagar</span><strong id="pagamento-total" class="contador">R$ 0,00</strong></div>
+
+      <fieldset class="opcoes opcoes-3">
+        <legend class="sr-only">Escolha como pagar</legend>
+        <label class="opcao">
+          <input type="radio" name="pagamento" value="pix">
+          <span class="opcao-corpo">
+            <svg class="opcao-icone" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 5l8 8-8 8-8-8zM24 27l8 8-8 8-8-8zM5 24l8-8 8 8-8 8zM27 24l8-8 8 8-8 8z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg>
+            <span><strong>Pix</strong><small>QR Code ou copia e cola</small></span>
+          </span>
+        </label>
+        <label class="opcao" id="opcao-cartao">
+          <input type="radio" name="pagamento" value="cartao">
+          <span class="opcao-corpo">
+            <svg class="opcao-icone" viewBox="0 0 48 48" aria-hidden="true"><rect x="5" y="11" width="38" height="26" rx="4" fill="none" stroke="currentColor" stroke-width="3"/><path d="M5 19h38" stroke="currentColor" stroke-width="5"/><path d="M11 30h10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+            <span><strong>Cartão</strong><small id="cartao-sub">Link de pagamento seguro</small></span>
+          </span>
+        </label>
+        <label class="opcao" id="opcao-cripto">
+          <input type="radio" name="pagamento" value="cripto">
+          <span class="opcao-corpo">
+            <svg class="opcao-icone" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="19" fill="none" stroke="currentColor" stroke-width="3"/><path d="M19 14v20M24 12v4M24 32v4M19 15h8a4.5 4.5 0 0 1 0 9h-8m0 0h9a5 5 0 0 1 0 10h-9" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span><strong>Criptomoeda</strong><small>Link de pagamento externo</small></span>
+          </span>
+        </label>
+      </fieldset>
+
+      <div id="bloco-pix" class="cartao bloco" hidden>
+        <p class="destaque">Valor do Pix: <strong id="pix-valor"></strong></p>
+        <div id="pix-qr" class="pix-qr"></div>
+        <label for="pix-codigo" class="rotulo">Pix copia e cola</label>
+        <textarea id="pix-codigo" rows="4" readonly spellcheck="false"></textarea>
+        <button type="button" id="btn-copiar-pix" class="btn btn-primario btn-largo">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" fill="none" stroke="currentColor" stroke-width="2.2"/></svg> Copiar código Pix</button>
+        <p class="dica">Abra o app do seu banco, escolha <strong>Pix → Copia e cola</strong> (ou leia o QR Code) e confira o nome do recebedor: <strong id="pix-recebedor"></strong>.</p>
+      </div>
+
+      <div id="bloco-cartao" class="cartao bloco" hidden>
+        <p class="aviso info">Pedido mínimo para cartão: <strong id="cartao-minimo"></strong>. A taxa do cartão já está embutida no preço — você paga só o total do pedido.</p>
+        <p class="destaque">Valor a pagar: <strong id="cartao-valor"></strong></p>
+        <a id="btn-link-cartao" class="btn btn-primario btn-largo" href="#" target="_blank" rel="noopener">Pagar com cartão ↗</a>
+        <p class="dica">O pagamento abre em outra página. Se pedir, digite o valor acima. Depois, volte aqui e envie o pedido.</p>
+      </div>
+
+      <div id="bloco-cripto" class="cartao bloco" hidden>
+        <p class="destaque">Valor a pagar: <strong id="cripto-valor"></strong></p>
+        <a id="btn-link-cripto" class="btn btn-primario btn-largo" href="#" target="_blank" rel="noopener">Pagar com criptomoeda ↗</a>
+        <p class="dica">O pagamento abre em outra página. Se pedir, use o valor acima em reais. Depois, volte aqui e envie o pedido.</p>
+      </div>
+
+      <div class="acoes">
+        <a href="#dados" class="btn btn-secundario">Voltar</a>
+        <button type="button" id="btn-ir-confirmar" class="btn btn-primario" disabled>Revisar pedido</button>
+      </div>
+    </section>
+
+    <!-- 6. CONFIRMAÇÃO ====================================== -->
+    <section class="tela" data-tela="confirmacao" hidden>
+      <div class="sucesso-arte" aria-hidden="true">
+        <svg viewBox="0 0 120 120" style="filter:drop-shadow(0 0 10px #00f0ff)"><path d="M60 6l47 27v54L60 114 13 87V33z" fill="#07060d" stroke="#00f0ff" stroke-width="4"/><path d="M60 20l35 20v40L60 100 25 80V40z" fill="none" stroke="#ff2bd6" stroke-width="2" stroke-dasharray="6 4"/><path d="M42 61l12 12 25-27" stroke="#fcee0a" stroke-width="9" fill="none" stroke-linecap="square" stroke-linejoin="miter"/></svg>
+      </div>
+      <h1 class="titulo-tela centro" tabindex="-1">Pedido pronto para enviar!</h1>
+      <p class="centro subtitulo">Confira o resumo e toque no botão verde para mandar o pedido pelo WhatsApp.</p>
+
+      <div id="resumo-final" class="cartao resumo"></div>
+
+      <a id="btn-whatsapp" class="btn btn-whatsapp btn-largo" href="#" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8.5 7.5c.3-.6.6-.6 1-.6h.6c.2 0 .4 0 .6.5l.8 1.9c.1.3 0 .5-.1.7l-.6.7c-.2.2-.2.4 0 .7.6 1 1.6 2 2.7 2.6.3.2.5.1.7 0l.7-.8c.2-.2.4-.3.7-.1l1.8.9c.3.1.5.3.5.5 0 .6-.2 1.4-.8 1.8-.6.5-1.5.7-2.6.4-2.5-.7-5-3-6-5.4-.5-1.3-.4-2.4.1-3.3z" fill="currentColor"/></svg>
+        Enviar pedido pelo WhatsApp
+      </a>
+      <button type="button" id="btn-novo" class="btn btn-secundario btn-largo">Fazer novo pedido</button>
+    </section>
+  </main>
+
+  <!-- Barra de total (tela inicial) -->
+  <div id="barra-total" class="barra-total">
+    <div class="barra-info">
+      <span id="barra-itens">0 itens</span>
+      <strong id="barra-valor" class="contador">R$ 0,00</strong>
+      <small id="barra-aviso"></small>
+    </div>
+    <a href="#carrinho" class="btn btn-primario">Ver carrinho</a>
+  </div>
+
+  <footer class="rodape">
+    <div class="faixa-rasta" aria-hidden="true"></div>
+    <p><strong>Loja Cyberpunk</strong> · <span id="ano"></span></p>
+    <p class="aviso-legal">Venda proibida para menores de 18 anos.</p>
+    <p>O Ministério da Saúde adverte: fumar causa câncer e outras doenças.</p>
+  </footer>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <div id="confete" class="confete" aria-hidden="true"></div>
+
+  <script src="products.js"></script>
+  <script src="qrcode.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
