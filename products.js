@@ -39,9 +39,9 @@
    ========================================================= */
 
 const CATEGORIAS = [
-  { id: "combos", nome: "Combos", texto: "Tudo separado e embalado junto. O preço é a soma dos itens.", cor: "ouro", destaque: true },
-  { id: "tabacaria", nome: "Tabacaria", texto: "Sedas, tabaco, piteiras e acessórios.", cor: "verde", destaque: false },
-  { id: "larica", nome: "Larica", texto: "Doce, salgado, refri e energético pra acompanhar.", cor: "vermelho", destaque: false },
+  { id: "combos", nome: "Kits", texto: "Loadout completo, já separado. O preço é a soma dos itens.", cor: "ouro", destaque: true },
+  { id: "tabacaria", nome: "Tabacaria", texto: "Sedas, tabaco, cigarros e acessórios com cara de futuro.", cor: "verde", destaque: false },
+  { id: "larica", nome: "Larica & Energia", texto: "Snacks, refri e energético pra virar a noite.", cor: "vermelho", destaque: false },
 ];
 
 const PRODUTOS = [
@@ -50,11 +50,11 @@ const PRODUTOS = [
   {
     id: "combo-kingston",
     categoria: "combos",
-    nome: "Combo Kingston",
-    descricao: "O essencial pra enrolar, com uma larica completa junto.",
+    nome: "Kit Overclock",
+    descricao: "O loadout básico: tudo pra enrolar e a larica pra recarregar.",
     preco: "soma",
     icone: "combo",
-    selo: "Pra começar",
+    selo: "Nível 1",
     itens: [
       { id: "tabaco-25", qtd: 1 },
       { id: "seda-king-brown", qtd: 3 },
@@ -70,8 +70,8 @@ const PRODUTOS = [
   {
     id: "combo-montego-bay",
     categoria: "combos",
-    nome: "Combo Montego Bay",
-    descricao: "Com dichavador e bandeja de metal, mais tabaco e larica pra dividir.",
+    nome: "Kit Neon Rush",
+    descricao: "Upgrade com dichavador e bandeja, mais tabaco e larica pra squad.",
     preco: "soma",
     icone: "combo",
     selo: "Mais pedido",
@@ -93,11 +93,11 @@ const PRODUTOS = [
   {
     id: "combo-zion",
     categoria: "combos",
-    nome: "Combo Zion",
-    descricao: "O kit completo da casa: acessórios, estoque de tabaco e larica de respeito.",
+    nome: "Kit Chrome Total",
+    descricao: "Equipamento completo da casa: acessórios, estoque de tabaco e larica de respeito.",
     preco: "soma",
     icone: "combo",
-    selo: "Completo",
+    selo: "Nível máx.",
     itens: [
       { nome: "Tabaco para enrolar 120 g", qtd: 1, preco: 83.8 }, // proporcional ao pacote de 50 g (R$ 34,90)
       { id: "seda-king-brown", qtd: 10 },
@@ -124,12 +124,18 @@ const PRODUTOS = [
   { id: "piteira-vidro", categoria: "tabacaria", nome: "Piteira de Vidro", descricao: "Reutilizável e lavável.", preco: 12.0, icone: "piteira", selo: "", itens: [] },
   { id: "dichavador-metal", categoria: "tabacaria", nome: "Dichavador de Metal", descricao: "4 partes, dentes afiados e ímã na tampa.", preco: 35.0, icone: "dichavador", selo: "", itens: [] },
   { id: "isqueiro", categoria: "tabacaria", nome: "Isqueiro", descricao: "Isqueiro a gás, cores sortidas.", preco: 5.0, icone: "isqueiro", selo: "", itens: [] },
+  // ---- acessórios neon / tech ----
+  { id: "isqueiro-plasma", categoria: "tabacaria", nome: "Isqueiro Plasma USB", descricao: "Arco elétrico duplo, recarrega no USB-C. Sem gás.", preco: 35.0, icone: "isqueiro", selo: "Novo", itens: [] },
+  { id: "dichavador-eletrico", categoria: "tabacaria", nome: "Dichavador Elétrico USB", descricao: "Motor recarregável e lâminas de inox.", preco: 69.9, icone: "dichavador", selo: "Tech", itens: [] },
+  { id: "bandeja-holografica", categoria: "tabacaria", nome: "Bandeja Holográfica", descricao: "Acabamento furta-cor que muda com a luz.", preco: 39.9, icone: "bandeja", selo: "Neon", itens: [] },
+  { id: "piteira-vidro-neon", categoria: "tabacaria", nome: "Piteira de Vidro Neon", descricao: "Vidro colorido que brilha sob luz negra.", preco: 18.0, icone: "piteira", selo: "", itens: [] },
   { id: "bandeja-metal", categoria: "tabacaria", nome: "Bandeja de Metal", descricao: "Tamanho médio, estampada.", preco: 30.0, icone: "bandeja", selo: "", itens: [] },
 
   // ---------- LARICA ----------
   { id: "salgadinho", categoria: "larica", nome: "Salgadinho", descricao: "Pacote de 100 g, sabores sortidos.", preco: 9.9, icone: "salgadinho", selo: "", itens: [] },
   { id: "chocolate", categoria: "larica", nome: "Chocolate", descricao: "Barra ao leite de 90 g.", preco: 11.0, icone: "chocolate", selo: "", itens: [] },
   { id: "cookies", categoria: "larica", nome: "Cookies", descricao: "Pacote com gotas de chocolate.", preco: 6.5, icone: "cookie", selo: "", itens: [] },
+  { id: "bala-acida-neon", categoria: "larica", nome: "Bala Ácida Neon", descricao: "Pacote de 100 g, cores fluorescentes.", preco: 8.5, icone: "bala", selo: "", itens: [] },
   { id: "bala-goma", categoria: "larica", nome: "Bala de Goma", descricao: "Pacote de 150 g, sabores de fruta.", preco: 7.5, icone: "bala", selo: "", itens: [] },
 
   // ---------- BEBIDAS (dentro da Larica) ----------
